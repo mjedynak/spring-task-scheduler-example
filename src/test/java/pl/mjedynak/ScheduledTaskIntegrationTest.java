@@ -18,7 +18,7 @@ public class ScheduledTaskIntegrationTest {
 
     @Test
     public void shouldInvokeTask() {
-        verify(timePrinter).reportCurrentTime();
+        verify(timePrinter).printCurrentTime();
     }
 
 }

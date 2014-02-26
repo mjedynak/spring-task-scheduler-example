@@ -12,7 +12,7 @@ public class TimePrinter {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
     private static final Logger LOGGER = LoggerFactory.getLogger(TimePrinter.class.getName());
 
-    public void reportCurrentTime() {
+    public void printCurrentTime() {
         LOGGER.info("The time is now " + DATE_FORMAT.format(new Date()));
     }
 
