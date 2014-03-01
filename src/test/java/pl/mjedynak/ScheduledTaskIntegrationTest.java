@@ -1,24 +1,36 @@
 package pl.mjedynak;
 
+import com.google.common.base.Predicate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kubek2k.springockito.annotations.ReplaceWithMock;
-import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.mockito.Mockito.verify;
+import java.util.Set;
+
+import static com.google.common.collect.Iterables.any;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = SpringockitoContextLoader.class)
+@ContextConfiguration(classes = AppConfig.class)
 public class ScheduledTaskIntegrationTest {
-
-    @ReplaceWithMock @Autowired private TimePrinter timePrinter;
 
     @Test
     public void shouldInvokeTask() {
-        verify(timePrinter).printCurrentTime();
+        Set<Thread> threads = Thread.getAllStackTraces().keySet();
+        any(threads, new HasNameEqualTo(ScheduledTask.THREAD_NAME));
     }
 
+    private static class HasNameEqualTo implements Predicate<Thread> {
+
+        private final String threadName;
+
+        public HasNameEqualTo(String threadName) {
+            this.threadName = threadName;
+        }
+
+        @Override
+        public boolean apply(Thread thread) {
+            return thread.getName().equals(threadName);
+        }
+    }
 }
